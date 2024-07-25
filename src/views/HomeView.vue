@@ -9,7 +9,7 @@ const products = ref([]);
 
 // Await then to get data from API (Fastest)
 products.value = await axios
-	.get("http://localhost:3000/products")
+	.get("http://192.168.100.127:3000/products")
 	.then((res) => res.data);
 console.log(products.value);
 
@@ -24,9 +24,12 @@ console.log(products.value);
 
 <template>
 	<main>
-		{{ products }}
 		<div class="product-grid">
-			<ProductCard />
+			<ProductCard
+				v-for="(product, index) in products"
+				:key="index"
+				:product="product"
+			/>
 		</div>
 		<div class="pagination">
 			<Pagination />
