@@ -2,21 +2,31 @@
 import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
+import router from "@/router";
 
 const route = useRoute();
 
 const id = route.params.id;
 const product = ref({});
+const API_URL = `http://localhost:3000/products/${id}`;
 
 onMounted(() => {
 	fetchData();
 });
 
 async function fetchData() {
-	const API_URL = `http://localhost:3000/products/${id}`;
 	try {
 		const response = await axios.get(API_URL);
 		product.value = response.data;
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+async function deleteProduct() {
+	try {
+		await axios.delete(API_URL);
+		router.push({ name: "home" });
 	} catch (error) {
 		console.log(error);
 	}
@@ -38,6 +48,12 @@ async function fetchData() {
 			class="back-button"
 			>Back</router-link
 		>
+		<button
+			@click="deleteProduct"
+			class="delete-button"
+		>
+			Delete
+		</button>
 	</div>
 </template>
 
@@ -76,8 +92,21 @@ async function fetchData() {
 	text-decoration: none;
 	border-radius: 4px;
 	transition: background-color 0.3s;
+	margin-right: 10px;
 }
 .back-button:hover {
 	background-color: #0056b3;
+}
+.delete-button {
+	display: inline-block;
+	padding: 8px 16px;
+	background-color: #dc3545;
+	color: #fff;
+	text-decoration: none;
+	border-radius: 4px;
+	transition: background-color 0.3s;
+}
+.delete-button:hover {
+	background-color: #c82333;
 }
 </style>
