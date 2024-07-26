@@ -1,5 +1,5 @@
 <template>
-	<div class="loading">Loading.....</div>
+	<div class="loading">Loading...</div>
 </template>
 
 <style scoped>
@@ -10,8 +10,5 @@
 	margin-top: 50px;
 	margin-bottom: 50px;
 	animation: pulse 1s infinite;
-
-	/* text-align: center;
-	padding: 20px; */
 }
 </style>
