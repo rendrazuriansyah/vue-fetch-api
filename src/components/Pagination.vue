@@ -19,7 +19,7 @@ function changePage(newPage) {
 	>
 		&lt;
 	</button>
-	Page {{ page }}
+	<span> Page {{ page }} of {{ totalPages }}</span>
 	<button
 		class="pagination-button"
 		id="nextPage"
