@@ -32,6 +32,12 @@ watch(page, async () => {
 		)
 		.then((res) => res.data);
 });
+
+function changePage(newPage) {
+	if (newPage < 1) return;
+	if (newPage > products.value.pages) return;
+	page.value = newPage;
+}
 </script>
 
 <template>
@@ -44,7 +50,11 @@ watch(page, async () => {
 			/>
 		</div>
 		<div class="pagination">
-			<Pagination />
+			<Pagination
+				:page="page"
+				:totalPages="products.pages"
+				@change-page="changePage"
+			/>
 		</div>
 	</main>
 </template>

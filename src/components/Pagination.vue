@@ -1,13 +1,30 @@
+<script setup>
+const props = defineProps({
+	page: Number,
+	totalPages: Number,
+});
+const emit = defineEmits(["change-page"]);
+
+function changePage(newPage) {
+	emit("change-page", newPage);
+}
+</script>
+
 <template>
 	<button
 		class="pagination-button"
 		id="prevPage"
+		@click="changePage(page - 1)"
+		v-show="page > 1"
 	>
 		&lt;
 	</button>
+	Page {{ page }}
 	<button
 		class="pagination-button"
 		id="nextPage"
+		@click="changePage(page + 1)"
+		v-show="page < totalPages"
 	>
 		&gt;
 	</button>
