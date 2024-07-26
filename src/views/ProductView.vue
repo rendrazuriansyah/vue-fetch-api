@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import axios from "axios";
 import { useRoute } from "vue-router";
 import router from "@/router";
+import ProductForm from "@/components/ProductForm.vue";
 
 const route = useRoute();
 
@@ -43,6 +44,7 @@ async function deleteProduct() {
 		/>
 		<p>{{ product.description }}</p>
 		<p>${{ product.price }}</p>
+		<productForm />
 		<router-link
 			to="/"
 			class="back-button"
