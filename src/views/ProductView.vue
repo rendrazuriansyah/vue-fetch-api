@@ -1,11 +1,11 @@
 <script setup>
 import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import axios from "axios";
-import { useRoute } from "vue-router";
-import router from "@/router";
 import ProductForm from "@/components/ProductForm.vue";
 
 const route = useRoute();
+const router = useRouter();
 
 const id = route.params.id;
 const product = ref({});
@@ -20,16 +20,25 @@ async function fetchData() {
 		const response = await axios.get(API_URL);
 		product.value = response.data;
 	} catch (error) {
-		console.log(error);
+		console.error(error);
+	}
+}
+
+async function updateProduct(product) {
+	try {
+		await axios.put(API_URL, product);
+		router.push("/");
+	} catch (error) {
+		console.error(error);
 	}
 }
 
 async function deleteProduct() {
 	try {
 		await axios.delete(API_URL);
-		router.push({ name: "home" });
+		router.push("/");
 	} catch (error) {
-		console.log(error);
+		console.error(error);
 	}
 }
 </script>
@@ -43,8 +52,11 @@ async function deleteProduct() {
 			class="product-image"
 		/>
 		<p>{{ product.description }}</p>
-		<p>${{ product.price }}</p>
-		<productForm />
+		<p>Rp{{ product.price }}</p>
+		<ProductForm
+			:product="product"
+			@update-product="updateProduct"
+		/>
 		<router-link
 			to="/"
 			class="back-button"
@@ -78,7 +90,6 @@ async function deleteProduct() {
 	margin-bottom: 5px;
 }
 .product-detail button {
-	margin-top: 10px;
 	padding: 10px 20px;
 	background-color: #007bff;
 	color: #fff;

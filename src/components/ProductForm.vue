@@ -1,44 +1,47 @@
 <script setup>
-import { ref, defineEmits } from "vue";
-import { onMounted } from "vue";
-import axios from "axios";
+import { ref, defineEmits, watchEffect, computed } from "vue";
+const props = defineProps({
+	product: Object,
+});
 
-const title = ref("");
+const title = ref(props.product?.title || "");
 const description = ref("");
 const price = ref("");
 const image = ref("");
 const id = ref("");
 
-const showForm = ref(false);
-
-const emit = defineEmits(["create-product"]);
-
-onMounted(async () => {
-	try {
-		const { data } = await axios.get("http://localhost:3000/products");
-		const latestProductId = data[data.length - 1].id;
-		id.value = String(Number(latestProductId) + 1);
-	} catch (error) {
-		console.error(error);
-	}
+watchEffect(() => {
+	title.value = props.product?.title;
+	description.value = props.product?.description;
+	price.value = props.product?.price;
+	image.value = props.product?.image;
+	id.value = props.product?.id;
 });
+
+const showForm = ref(false);
+const isUpdate = computed(() => !!props.product);
+
+const emit = defineEmits(["create-product", "update-product"]);
 
 function saveProduct() {
 	const formData = {
-		id: id.value,
 		title: title.value,
 		description: description.value,
 		price: price.value,
 		image: image.value,
 	};
-	emit("create-product", formData);
+	if (isUpdate.value) {
+		emit("update-product", formData);
+	} else {
+		emit("create-product", formData);
+	}
 }
 </script>
 
 <template>
 	<div class="add-product">
 		<button @click="showForm = !showForm">
-			{{ isEdit ? "Edit" : "Add" }} Product
+			{{ isUpdate ? "Edit" : "Add" }} Product
 		</button>
 		<div
 			v-if="showForm"
