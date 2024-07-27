@@ -1,5 +1,7 @@
 <script setup>
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
+import { onMounted } from "vue";
+import axios from "axios";
 
 const title = ref("");
 const description = ref("");
@@ -8,6 +10,29 @@ const image = ref("");
 const id = ref("");
 
 const showForm = ref(false);
+
+const emit = defineEmits(["create-product"]);
+
+onMounted(async () => {
+	try {
+		const { data } = await axios.get("http://localhost:3000/products");
+		const latestProductId = data[data.length - 1].id;
+		id.value = String(Number(latestProductId) + 1);
+	} catch (error) {
+		console.error(error);
+	}
+});
+
+function saveProduct() {
+	const formData = {
+		id: id.value,
+		title: title.value,
+		description: description.value,
+		price: price.value,
+		image: image.value,
+	};
+	emit("create-product", formData);
+}
 </script>
 
 <template>

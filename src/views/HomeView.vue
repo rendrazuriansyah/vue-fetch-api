@@ -34,6 +34,15 @@ function changePage(newPage) {
 	if (newPage > products.value.pages) return;
 	page.value = newPage;
 }
+
+async function createProduct(product) {
+	try {
+		await axios.post("http://localhost:3000/products", product);
+		fetchData();
+	} catch (error) {
+		console.error(error);
+	}
+}
 </script>
 
 <template>
@@ -41,7 +50,7 @@ function changePage(newPage) {
 		<Loading />
 	</div>
 	<main v-else>
-		<ProductForm />
+		<ProductForm @create-product="createProduct" />
 		<div class="product-grid">
 			<ProductCard
 				v-for="(product, index) in products.data"
